@@ -12,7 +12,5 @@ folders = [
 	{ 	'path':				'~/Desktop/TestFolder	',
 		'recursive':		False,
 		'extension':		'.txt',
-		'export_appendix':	'_export',
-		'export_ext':		'.pdf',
 		'command':			'echo' }
 ]

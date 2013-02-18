@@ -11,8 +11,6 @@ Copyright (c) 2013 IR Labs, Amsterdam. All rights reserved.
 #	path
 #	recursive
 #	extension
-#	export_appendix
-#	export_ext
 #	command
 
 # Run this script as a daemon (with launchd)
@@ -29,40 +27,25 @@ Copyright (c) 2013 IR Labs, Amsterdam. All rights reserved.
 # the files we're interested in, and comparing them with ... with what?
 # With the modification times of the files stored in a sqlite db?
 
-import sys, os, time
-
+import sys, os, time, fnmatch
 import file_watch_settings
-
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-
-class ChangeHandler(FileSystemEventHandler):
-	"""
-	React to changes in files of defined type.
-	"""
-	def on_any_event(self, event):
-		if event.is_directory:
-			return
-		print event
+import sqlite3 as lite
 
 def main():
 	observerList = []
 	for folder in file_watch_settings.folders:
-		event_handler = ChangeHandler()
-		observer = Observer()
 		path = os.path.expanduser(folder['path'])
-		recursive = folder['recursive']
-		observer.schedule(event_handler, path=path, recursive=recursive)
-		observer.start()
-		observerList.append(observer)
+		recursiveFlag = folder['recursive']
+		for root, dirnames, filenames in os.walk(path):
+			if not recursiveFlag:
+				if len(dirnames) > 0:
+					dirnames.pop()
+			print root, dirnames, filenames
 	try:
 		while True:
 			time.sleep(1)
 	except KeyboardInterrupt:
-		for observer in observerList:
-			observer.stop()
-	for observer in observerList:
-		observer.join()
+		sys.exit()
 	print
 
 if __name__ == '__main__':

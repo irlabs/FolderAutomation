@@ -9,8 +9,8 @@ Copyright (c) 2013 IR Labs, Amsterdam. All rights reserved.
 
 # Folders to watch
 folders = [
-	{ 	'path':				'~/Desktop/TestFolder	',
-		'recursive':		False,
-		'extension':		'.txt',
+	{ 	'path':				'~/Desktop/TestFolder',
+		'recursive':		True,
+		'extension':		'txt',
 		'command':			'echo' }
 ]

@@ -12,5 +12,9 @@ folders = [
 	{ 	'path':				'~/Desktop/TestFolder',
 		'recursive':		True,
 		'extension':		'txt',
-		'command':			'echo' }
+		'command':			'echo' },
+	{ 	'path':				'~/Desktop/TestFolder',
+		'recursive':		True,
+		'extension':		'graffle',
+		'command':			'osascript /Users/dirk/Developer/Python/FolderAutomation/omnigraffle_export.scpt' },
 ]

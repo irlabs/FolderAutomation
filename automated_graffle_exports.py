@@ -14,18 +14,21 @@ Copyright (c) 2013 IR Labs, Amsterdam. All rights reserved.
 #	command
 
 # Run this script as a daemon (with launchd)
-# Find all files of type '.graffle'
-# Define default export file
-# Filter only files of which the modified date is later than default export file
-# Run the file through applescript
+
+# This script goes through all the paths supplied in
+# the settings file, resursively if needs be;
+# Find all files of the type specified in the settings;
+# Compares the modification date of the file to the
+# modification date stored in the sqlite database;
+# Filters only the new files or the modified once;
+# And runs the supplied command with the file as argument.
 
 # Watchdog detects file changes made with e.g. Textmate,
 # but doesn't detect file changes from TextEdit and OmniGraffle.
 # This is a major problem for this script, because it was primarily
 # meant for .graffle files.
-# We need to adopt a new strategy of polling the modification times of
-# the files we're interested in, and comparing them with ... with what?
-# With the modification times of the files stored in a sqlite db?
+# The alternative strategy, which we're adopting is that of
+# polling the modification times of the files we're interested in.
 
 import sys, os, time, fnmatch
 import file_watch_settings
@@ -84,7 +87,8 @@ def watchfolder(folderDict):
 	path = os.path.expanduser(folderDict['path'])
 	recursiveFlag = folderDict['recursive']
 	extension = "*.%s" % (folderDict['extension'])
-	cmd = folderDict['command']
+	cmds = []
+	cmds += folderDict['command'].split(' ')
 	for root, dirnames, filenames in os.walk(path):
 		if not recursiveFlag:
 			if len(dirnames) > 0:
@@ -92,7 +96,8 @@ def watchfolder(folderDict):
 		for filename in fnmatch.filter(filenames, extension):
 			filepath = os.path.join(root, filename)
 			if hasBeenModified(filepath):
-				call([cmd, filepath])
+				cmds.append(filepath)
+				call(cmds)
 
 def main():
 	initDB()
@@ -100,7 +105,7 @@ def main():
 	# 	watchfolder(folder)
 	try:
 		while True:
-			time.sleep(1)
+			time.sleep(2)
 			for folder in file_watch_settings.folders:
 				watchfolder(folder)
 	except KeyboardInterrupt:

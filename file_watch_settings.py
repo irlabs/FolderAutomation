@@ -9,12 +9,13 @@ Copyright (c) 2013 IR Labs, Amsterdam. All rights reserved.
 
 # Folders to watch
 folders = [
-	{ 	'path':				'~/Desktop/TestFolder',
-		'recursive':		True,
-		'extension':		'txt',
-		'command':			'echo' },
-	{ 	'path':				'~/Desktop/TestFolder',
-		'recursive':		True,
-		'extension':		'graffle',
-		'command':			'osascript /Users/dirk/Developer/Python/FolderAutomation/omnigraffle_export.scpt' },
+	# { 	'path':					'~/Desktop/TestFolder',
+	# 	'recursive':			True,
+	# 	'extension':			'txt',
+	# 	'command':				'echo' },
+	{ 	'path':					'~/Peerby-Dropbox/Dropbox/Interaction/Version 2.0/iOS Tabs',
+		'recursive':			True,
+		'processFileBundles':	True,
+		'extension':			'graffle',
+		'command':				'osascript /Users/dirk/bin/FolderAutomation/omnigraffle_export.scpt' },
 ]

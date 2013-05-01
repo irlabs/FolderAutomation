@@ -49,6 +49,10 @@ end logme
 -- this sub-routine does the export 
 on process_item(source_file, new_name, results_folder)
 	set the source_item to the POSIX path of the source_file
+	-- Make sure it can also handle file bundles
+	if text -1 of source_item is "/" then
+		set the source_item to text 1 through -2 of source_item
+	end if
 	set the target_path to (((results_folder as string) & new_name) as string)
 	with timeout of 900 seconds
 		tell application "OmniGraffle 5"
@@ -89,4 +93,3 @@ on process_item(source_file, new_name, results_folder)
 		end tell
 	end timeout
 end process_item
-

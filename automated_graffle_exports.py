@@ -84,7 +84,6 @@ def watchfolder(folderDict):
 	"""
 	Watches the folder for changes in specified files.
 	"""
-	# TODO: make this work with Omnigraffle folders as well
 	path = os.path.expanduser(folderDict['path'])
 	recursiveFlag = folderDict['recursive']
 	processBundlesFlag = folderDict['processFileBundles']
@@ -92,8 +91,19 @@ def watchfolder(folderDict):
 	cmds = []
 	cmds += folderDict['command'].split(' ')
 	for root, dirnames, filenames in os.walk(path):
+		if processBundlesFlag:
+			indexesToPop = []
+			i = 0
+			for bundle in dirnames:
+				if (fnmatch.fnmatch(bundle, extension)):
+					indexesToPop.append(i)
+					filenames.append(bundle)
+				i += 1
+			indexesToPop.reverse()
+			for indexToPop in indexesToPop:
+				dirnames.pop(indexToPop)
 		if not recursiveFlag:
-			if len(dirnames) > 0:
+			while len(dirnames) > 0:
 				dirnames.pop()
 		for filename in fnmatch.filter(filenames, extension):
 			filepath = os.path.join(root, filename)
